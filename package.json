@@ -1,0 +1,14 @@
+{
+  "name": "heatmap-package",
+  "version": "1.0.0",
+  "description": "A package for heatmaps on node.js and the browser",
+  "main": "index.js",
+  "repository": "https://github.com/luk3skyw4lker/heatmap-pkg.git",
+  "author": "Lucas Henrique",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "canvas": "^2.6.1",
+    "color-convert": "^2.0.1"
+  }
+}
