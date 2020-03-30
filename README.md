@@ -9,21 +9,23 @@ Heatmaps for node.js and the browser, groovy!
 ### blob.js
 
 ```javascript
-var heatmap = require("heatmap");
+const heatmap = require("heatmap");
+const fs = require("fs");
 
-var heat = heatmap(500, 500, { radius: 30 });
-for (var i = 0; i < 5000; i++) {
-  var rho = Math.random() * 2 * Math.PI;
-  var z = Math.pow(Math.random(), 2) * 200;
+const heat = heatmap(500, 500, { radius: 30 });
 
-  var x = 250 + Math.cos(rho) * z;
-  var y = 250 + Math.sin(rho) * z;
+for (let i = 0; i < 5000; i += 1) {
+  let rho = Math.random() * 2 * Math.PI;
+  let z = Math.pow(Math.random(), 2) * 200;
+
+  let x = 250 + Math.cos(rho) * z;
+  let y = 250 + Math.sin(rho) * z;
 
   heat.addPoint(x, y);
 }
+
 heat.draw();
 
-var fs = require("fs");
 fs.writeFileSync("blob.png", heat.canvas.toBuffer());
 ```
 
