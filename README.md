@@ -4,9 +4,9 @@ Heatmaps for node.js and the browser, groovy!
 
 ![groovy heatmap, man](./examples/blob.png)
 
-# example
+## Example
 
-## blob.js
+### blob.js
 
 ```javascript
 var heatmap = require("heatmap");
@@ -27,9 +27,7 @@ var fs = require("fs");
 fs.writeFileSync("blob.png", heat.canvas.toBuffer());
 ```
 
-# methods
-
-var heatmap = require('heatmap');
+# Methods
 
 ## var heat = heatmap(...)
 
