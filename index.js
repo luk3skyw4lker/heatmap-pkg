@@ -34,8 +34,8 @@ class Heat {
     this.scalar.x = x;
     this.scalar.y = y;
 
-    this.width = this.width * x;
-    this.height = this.height * y;
+    this.canvas.width = this.width * x;
+    this.canvas.height = this.height * y;
 
     this.canvas.getContext("2d").scale(x, y);
 
