@@ -1,18 +1,17 @@
 # Heatmap
 
-Heatmaps for node.js and the browser, groovy!
+Heatmaps for node.js and the browser!
 
-![groovy heatmap, man](./examples/blob.png)
+![Example Heatmap](./examples/blob.png)
 
 ## Example
 
 ### blob.js
 
 ```javascript
-const heatmap = require("heatmap");
+const Heatmap = require("heatmap");
 const fs = require("fs");
-
-const heat = heatmap(500, 500, { radius: 30 });
+const heat = new Heatmap(500, 500, { radius: 30 });
 
 for (let i = 0; i < 5000; i += 1) {
   let rho = Math.random() * 2 * Math.PI;
