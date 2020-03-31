@@ -1,6 +1,6 @@
-const heatmap = require("./heatmap");
-
-const heat = heatmap(500, 500, { radius: 30 });
+const Heatmap = require("../index");
+const fs = require("fs");
+const heat = new Heatmap(500, 500, { radius: 30 });
 
 for (let i = 0; i < 5000; i += 1) {
   let rho = Math.random() * 3 * Math.PI;
@@ -14,5 +14,4 @@ for (let i = 0; i < 5000; i += 1) {
 
 heat.draw();
 
-var fs = require("fs");
 fs.writeFileSync("blob.png", heat.canvas.toBuffer());
