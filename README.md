@@ -65,7 +65,7 @@ The HTML Canvas element.
 Protip: with the [canvas module](https://github.com/LearnBoost/node-canvas) for
 node you can `heat.canvas.buffer()` to get a Buffer with a PNG file all up in it.
 
-# install
+# Install
 
 With [npm](http://npmjs.org), just do:
 
