@@ -68,4 +68,4 @@ node you can `heat.canvas.buffer()` to get a Buffer with a PNG file all up in it
 
 With [npm](http://npmjs.org), just do:
 
-    npm install heatmap
+    npm install heatmap-pkg

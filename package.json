@@ -1,5 +1,5 @@
 {
-  "name": "heatmaps",
+  "name": "heatmap-pkg",
   "version": "1.0.0",
   "description": "A package for heatmaps on node.js and the browser",
   "main": "index.js",
