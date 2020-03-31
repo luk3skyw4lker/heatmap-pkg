@@ -10,5 +10,10 @@
   "dependencies": {
     "canvas": "^2.6.1",
     "color-convert": "^2.0.1"
-  }
+  },
+  "keywords": [
+    "heatmap",
+    "browser",
+    "canvas"
+  ]
 }

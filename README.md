@@ -30,10 +30,12 @@ fs.writeFileSync("blob.png", heat.canvas.toBuffer());
 
 # Methods
 
-## var heat = heatmap(...)
+## var heat = new Heatmap(...)
 
-Create a new heatmap from an existing canvas element, a numeric width and
-height, or an option object with canvas or width and height fields.
+There are _two_ ways of creating a new heatmap:
+
+- With the id of the target canvas element
+- With the height and width values for the canvas element to be created
 
 Optionally, you can set the `opts.radius` and `opts.threshold` to control the
 rendering a little.
@@ -42,7 +44,7 @@ rendering a little.
 
 Add a point to the heatmap with a `radius`.
 
-`params` can have:
+`params` must be an object and can have:
 
 - radius, defaults to heat.radius || 20
 - weight, defaults to 0.1
@@ -66,6 +68,10 @@ node you can `heat.canvas.buffer()` to get a Buffer with a PNG file all up in it
 
 # Install
 
-With [npm](http://npmjs.org), just do:
+With [npm](https://npmjs.org), just do:
 
     npm install heatmap-pkg
+
+Or with [yarn](https://yarnpkg.com):
+
+    yarn add heatmap-pkg
