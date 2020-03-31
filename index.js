@@ -28,6 +28,19 @@ class Heat {
     this.scalar = { x: 1, y: 1 };
   }
 
+  constructor(canvasId, opts) {
+    if (!opts) opts = {};
+
+    this.canvas = document.getElementById(canvasId);
+
+    this.width = this.canvas.width;
+    this.height = this.canvas.height;
+
+    this.radius = opts.radius || 20;
+    this.threshold = opts.threshold || 0;
+    this.scalar = { x: 1, y: 1 };
+  }
+
   scale(x, y) {
     if (y === undefined) y = x;
 
