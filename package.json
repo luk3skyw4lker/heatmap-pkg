@@ -1,6 +1,6 @@
 {
   "name": "heatmap-pkg",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A package for heatmaps on node.js and the browser",
   "main": "index.js",
   "repository": "https://github.com/luk3skyw4lker/heatmap-pkg.git",
