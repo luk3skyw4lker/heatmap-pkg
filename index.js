@@ -1,106 +1,101 @@
-const convert = require("color-convert");
-const Canvas = require("canvas").Canvas;
+const convert = require('color-convert');
+const Canvas = require('canvas').Canvas;
 const isBrowser =
-  typeof window !== "undefined" && typeof window.document !== "undefined";
+	typeof window !== 'undefined' && typeof window.document !== 'undefined';
 
 function createCanvas(width, height) {
-  if (isBrowser) {
-    const canvas = document.createElement("canvas");
-    canvas.setAttribute("width", width);
-    canvas.setAttribute("height", height);
-    return canvas;
-  } else {
-    return new Canvas(width, height);
-  }
+	if (isBrowser) {
+		const canvas = document.createElement('canvas');
+		canvas.setAttribute('width', width);
+		canvas.setAttribute('height', height);
+		return canvas;
+	} else {
+		return new Canvas(width, height);
+	}
 }
 
 class Heat {
-  constructor(width, height, opts) {
-    if (!opts) opts = {};
+	constructor(width, height, opts) {
+		if (!opts) opts = {};
 
-    this.width = width;
-    this.height = height;
+		if (typeof width === 'string' || Number.isNaN(width)) {
+			// in this case, width is the canvasId in the HTML
+			this.canvas = document.getElementById(width);
 
-    this.canvas = createCanvas(this.width, this.height);
+			this.width = this.canvas.width;
+			this.height = this.canvas.height;
+		} else {
+			this.width = width;
+			this.height = height;
 
-    this.radius = opts.radius || 20;
-    this.threshold = opts.threshold || 0;
-    this.scalar = { x: 1, y: 1 };
-  }
+			this.canvas = createCanvas(this.width, this.height);
+		}
 
-  constructor(canvasId, opts) {
-    if (!opts) opts = {};
+		this.radius = opts.radius || 20;
+		this.threshold = opts.threshold || 0;
+		this.scalar = { x: 1, y: 1 };
+	}
 
-    this.canvas = document.getElementById(canvasId);
+	scale(x, y) {
+		if (y === undefined) y = x;
 
-    this.width = this.canvas.width;
-    this.height = this.canvas.height;
+		this.scalar.x = x;
+		this.scalar.y = y;
 
-    this.radius = opts.radius || 20;
-    this.threshold = opts.threshold || 0;
-    this.scalar = { x: 1, y: 1 };
-  }
+		this.canvas.width = this.width * x;
+		this.canvas.height = this.height * y;
 
-  scale(x, y) {
-    if (y === undefined) y = x;
+		this.canvas.getContext('2d').scale(x, y);
 
-    this.scalar.x = x;
-    this.scalar.y = y;
+		return this.scalar;
+	}
 
-    this.canvas.width = this.width * x;
-    this.canvas.height = this.height * y;
+	addPoint(x, y, radius = this.radius, weight = 1 / 10) {
+		const ctx = this.canvas.getContext('2d');
 
-    this.canvas.getContext("2d").scale(x, y);
+		const g = ctx.createRadialGradient(x, y, 0, x, y, radius);
 
-    return this.scalar;
-  }
+		g.addColorStop(0, 'rgba(255,255,255,' + weight + ')');
+		g.addColorStop(1, 'rgba(255,255,255,0)');
 
-  addPoint(x, y, radius = this.radius, weight = 1 / 10) {
-    const ctx = this.canvas.getContext("2d");
+		ctx.fillStyle = g;
+		ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
 
-    const g = ctx.createRadialGradient(x, y, 0, x, y, radius);
+		return this;
+	}
 
-    g.addColorStop(0, "rgba(255,255,255," + weight + ")");
-    g.addColorStop(1, "rgba(255,255,255,0)");
+	draw() {
+		const width = this.canvas.width;
+		const height = this.canvas.height;
+		const ctx = this.canvas.getContext('2d');
 
-    ctx.fillStyle = g;
-    ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
+		const values = ctx.getImageData(0, 0, this.width, this.height);
+		const heat = ctx.createImageData(width, height);
 
-    return this;
-  }
+		for (var hy = 0; hy < height; hy++) {
+			var vy = Math.floor(hy / this.scalar.y);
 
-  draw() {
-    const width = this.canvas.width;
-    const height = this.canvas.height;
-    const ctx = this.canvas.getContext("2d");
+			for (var hx = 0; hx < width; hx++) {
+				var vx = Math.floor(hx / this.scalar.x);
+				var vi = 4 * (vy * this.width + vx);
+				var hi = 4 * (hy * width + hx);
 
-    const values = ctx.getImageData(0, 0, this.width, this.height);
-    const heat = ctx.createImageData(width, height);
+				var v = values.data[vi + 3];
+				if (v > this.threshold) {
+					var theta = (1 - v / 255) * 270;
+					var rgb = convert.hsl.rgb(theta, 100, 50);
+					heat.data[hi] = rgb[0];
+					heat.data[hi + 1] = rgb[1];
+					heat.data[hi + 2] = rgb[2];
+					heat.data[hi + 3] = v;
+				}
+			}
+		}
 
-    for (var hy = 0; hy < height; hy++) {
-      var vy = Math.floor(hy / this.scalar.y);
+		this.canvas.getContext('2d').putImageData(heat, 0, 0);
 
-      for (var hx = 0; hx < width; hx++) {
-        var vx = Math.floor(hx / this.scalar.x);
-        var vi = 4 * (vy * this.width + vx);
-        var hi = 4 * (hy * width + hx);
-
-        var v = values.data[vi + 3];
-        if (v > this.threshold) {
-          var theta = (1 - v / 255) * 270;
-          var rgb = convert.hsl.rgb(theta, 100, 50);
-          heat.data[hi] = rgb[0];
-          heat.data[hi + 1] = rgb[1];
-          heat.data[hi + 2] = rgb[2];
-          heat.data[hi + 3] = v;
-        }
-      }
-    }
-
-    this.canvas.getContext("2d").putImageData(heat, 0, 0);
-
-    return this;
-  }
+		return this;
+	}
 }
 
 module.exports = Heat;
